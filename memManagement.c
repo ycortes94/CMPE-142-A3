@@ -6,7 +6,7 @@
 
 void FIFO()
 {
-    
+    // comments
 }
 
 void LRU()
