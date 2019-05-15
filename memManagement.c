@@ -6,6 +6,8 @@
 #include <time.h>
 #include "memManagement.h"
 #define ptsize 1048567
+
+
 // using System;
 // using System.Collections;
 // using System.Collections.Generic;
@@ -36,9 +38,104 @@ int FIFO(int pages[], int n, int capacity) {
 return page_faults;
 }
 */
+
+int pointer;
+int faults ,hits;
+void print(int frame_size,int frame[])
+{
+	int i;
+	//printf("Printing the Frames: ");
+	for(i=0;i<frame_size;i++)
+	{
+		if(frame[i]==-1)
+			printf("- ");
+		else
+			printf("%d ",frame[i]);
+	}
+
+	printf("\n");
+}
+
+int predict(int reference_length, int references[], int page_num ,int frame_size,int frame[], int start)
+{
+	int position = -1, farthest = start, i;
+	for(i=0;i<frame_size;i++)
+	{
+		int j;
+		for(j=start-1;j>=0;j--)
+		{
+			if(frame[i]==references[j])
+			{
+				if(j<farthest)
+				{
+					farthest=j;
+					position=i;
+				}
+				break;
+			}
+		}
+		if(j==page_num)
+			return i;
+	}
+	if(position == -1)
+		return 0;
+	else
+		return position;
+}
+
+void add_reference(int frame_size,int frame[], int reference, int current_position,int reference_length, int references[])
+{
+	int i;
+	bool allocated=false;
+	for(i=0;i<frame_size;i++)
+	{
+		
+		if(frame[i]==reference)
+		{
+			printf("  Hit for %d | ", reference);
+			hits++;
+			allocated = true;
+			break;
+		}
+		else if(frame[i]==-1)
+		{
+			frame[i] = reference;
+			printf("Fault for %d | ", reference);
+			faults++;
+			allocated = true;
+			break;
+		}
+	}
+	if(allocated==false)
+	{
+		int j = predict(reference_length,references,current_position,frame_size,frame,current_position+1);
+
+		frame[j] = reference;
+		printf("Fault for %d | ", reference);
+		faults++;	
+	}
+	print(frame_size, frame);
+}
+
 void LRU()
 {
-   
+   int frame_size = 20,i,number_of_references = 100;
+	int frame[frame_size];
+	for(i=0;i<frame_size;i++)
+	{
+		frame[i] = -1;
+	}
+
+	print(frame_size,frame);
+
+	int reference[number_of_references];
+	
+	for(i=0;i<number_of_references;i++)
+	{
+		scanf("%d",&reference[i]);
+		add_reference(frame_size,frame,reference[i],i,number_of_references,reference);
+	}
+	printf("\nNumber of faults: %d \nNumber of hits: %d\n",faults,hits );
 }
 
 void Random(int frames, char *tracefile, int debug)
@@ -83,7 +180,7 @@ void Random(int frames, char *tracefile, int debug)
             nextavailcache =1;
             cache[frontcache].vpn= pagenum;
             pt[pagenum].present =1;
-            readcount++;
+            readcnt++;
             if(rw == "W"){
                cache[frontcache].dirty =1;
             }
@@ -137,8 +234,6 @@ void Random(int frames, char *tracefile, int debug)
       }
       fclose(file);
    }
-
-
 }
 
 int main(int argc, char **argv)
@@ -147,32 +242,6 @@ int main(int argc, char **argv)
    FILE *fp = fopen(filename, "r");
    if (fp != NULL)
    {
-      char ch='b';
-     //ACTION table
-     switch (ch)
-     {
-         case 'C':
-            printf("Process is Created");
-            break;
-         case 'T':
-            printf("Process is Terminated");
-            break;
-         case 'A':
-            printf("Process allocated memory at address 'PAGE'");
-            break;
-         case 'R':
-            printf("Process is read");
-            break;
-         case 'W':
-            printf("Process wrote to 'PAGE'");
-            break;
-         case 'F':
-            printf("Process freed memory at address 'PAGE'");
-            break;
-         default:
-            printf("Default ");
-    }
-
       int frame, debug;
       char *tfile;
       FIFO();

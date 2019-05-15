@@ -2,7 +2,7 @@
 
 int traceEv = 0;
 int readcnt= 0;
-int wrtiecnt =0;
+int writecnt =0;
 int hitcount =0;
 
 struct tableentry{
