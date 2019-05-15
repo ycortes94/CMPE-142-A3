@@ -259,7 +259,7 @@ int main(int argc, char **argv)
    {
       int frame, debug;
       char *tfile;
-      // FIFO();
+      FIFO();
       LRU();
       Random(frame, tfile, debug);
       fclose(fp);
