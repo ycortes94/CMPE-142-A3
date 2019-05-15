@@ -3,12 +3,36 @@
 #include <sys/wait.h>
 #include <stdlib.h>
 #include <stdbool.h>
+using System;
+using System.Collections;
+using System.Collections.Generic;
 
-void FIFO()
-{
-    // comments
+/*
+int FIFO(int pages[], int n, int capacity) {
+   HashSet<int> s = new HashSet<int>(capacity);
+   Queue indexes = new Queue();
+   int page_faults = 0;
+   for(int i = 0; i < n; i++) {
+      if(s.Count < capacity) {
+         if(!s.Contains(pages[i])) {
+            s.Add(pages[i]);
+            page_faults++;
+            indexes.Enqueue(pages[i]);
+         }
+      } else {
+         if(!s.Contains(pages[i])) {
+            int val = (int)indexes.Peek();
+            indexes.Dequeue();
+            s.Removal(val);
+            s.Add(pages[i]);
+            indexes.Enqueue(pages[i]);
+            page_faults++;
+         }
+      }
+   }
+return page_faults;
 }
-
+*/
 void LRU()
 {
    
