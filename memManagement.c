@@ -11,30 +11,45 @@
 // using System.Collections;
 // using System.Collections.Generic;
 
-int FIFO(int pages[], int n, int capacity)
-{
-       HashSet<int> s = new HashSet<int>(capacity);
-       Queue indexes = new Queue();
-       int page_faults = 0;
-       for(int i = 0; i < n; i++) {
-          if(s.Count < capacity) {
-             if(!s.Contains(pages[i])) {
-                s.Add(pages[i]);
-                page_faults++;
-                indexes.Enqueue(pages[i]);
-             }
-          } else {
-             if(!s.Contains(pages[i])) {
-                int val = (int)indexes.Peek();
-                indexes.Dequeue();
-                s.Removal(val);
-                s.Add(pages[i]);
-                indexes.Enqueue(pages[i]);
-                page_faults++;
-             }
-          }
-       }
-    return page_faults;
+
+
+typedef struct pageElement {
+      int processId;
+      char action;
+      int page;
+   } pageE;
+
+int FIFO(FILE fp) {  
+   pageE* newPage = malloc(sizeof(CAPACITY));
+   n = CAPACITY;
+
+   while(fread(newPage, sizeof(CAPACITY), 1, fp)) {
+      fscanf(fp, "%d %s %d", newPage[i]->processID, newPage[i]->action, newPage[i]->virtualPage);
+      i++;
+   }
+   HashSet<int> s = new HashSet<int>(CAPACITY);
+   Queue indexes = new Queue();
+   int page_faults = 0;
+   for(int i = 0; i < n; i++) {
+      if(s.Count < CAPACITY) {
+         if(!s.Contains(pages[i])) {
+            s.Add(pages[i]);
+            page_faults++;
+            indexes.Enqueue(pages[i]);
+         }
+      } else {
+         if(!s.Contains(pages[i])) {
+            int val = (int)indexes.Peek();
+            indexes.Dequeue();
+            s.Removal(val);
+            s.Add(pages[i]);
+            indexes.Enqueue(pages[i]);
+            page_faults++;
+         }
+      }
+   }
+return page_faults;
+
 }
 
 /*FOR LEAST RECENTLY USED ALGORITHM*/
@@ -259,7 +274,7 @@ int main(int argc, char **argv)
    {
       int frame, debug;
       char *tfile;
-      FIFO();
+      FIFO(fp);
       LRU();
       Random(frame, tfile, debug);
       fclose(fp);
